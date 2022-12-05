@@ -50,7 +50,6 @@ fn sol1(input: &Vec<String>) -> u64 {
 fn sol2(input: &Vec<String>) -> u64 {
     let groups = input.chunks(3);
     let mut sum: u64 = 0;
-    println!("{:?}", groups);
 
     for group in groups {
         let compartment1: Vec<char> = group[0].chars().map(|chars| chars).collect();
