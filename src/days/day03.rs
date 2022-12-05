@@ -14,26 +14,6 @@ pub fn solve() -> SolutionPair {
     (Solution::U64(sol1), Solution::U64(sol2))
 }
 
-fn find_matching(compartment1: Vec<char>, compartment2: Vec<char>) -> Vec<char> {
-    let mut matching: Vec<char> = vec![];
-    for letter in compartment1.iter() {
-        if compartment2.contains(letter) {
-            matching.push(*letter);
-        }
-    }
-
-    matching
-}
-
-fn get_priority(input: char) -> u64 {
-    // input as u64 - 64
-    let priority = input as u64;
-    match priority >= 97 {
-        true => priority - 96,
-        false => priority - 38,
-    }
-}
-
 fn sol1(input: &Vec<String>) -> u64 {
     let mut sum: u64 = 0;
     for line in input {
@@ -62,4 +42,26 @@ fn sol2(input: &Vec<String>) -> u64 {
         sum += get_priority(*badge.first().unwrap());
     }
     sum
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+fn find_matching(compartment1: Vec<char>, compartment2: Vec<char>) -> Vec<char> {
+    let mut matching: Vec<char> = vec![];
+    for letter in compartment1.iter() {
+        if compartment2.contains(letter) {
+            matching.push(*letter);
+        }
+    }
+
+    matching
+}
+
+fn get_priority(input: char) -> u64 {
+    // input as u64 - 64
+    let priority = input as u64;
+    match priority >= 97 {
+        true => priority - 96,
+        false => priority - 38,
+    }
 }

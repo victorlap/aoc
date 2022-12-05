@@ -13,6 +13,27 @@ pub fn solve() -> SolutionPair {
     (Solution::U64(sol1), Solution::U64(sol2))
 }
 
+fn sol1(input: &Vec<String>) -> u64 {
+    let mut score: u64 = 0;
+    for line in input {
+        let chars: Vec<char> = line.chars().collect();
+        score += get_score(chars[0], chars[2]);
+    }
+    score
+}
+
+fn sol2(input: &Vec<String>) -> u64 {
+    let mut score: u64 = 0;
+    for line in input {
+        let chars: Vec<char> = line.chars().collect();
+        let my_move = determine_move(chars[0], chars[2]);
+        score += get_score(chars[0], my_move);
+    }
+    score
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 const ROCK: u64 = 1;
 const PAPER: u64 = 2;
 const SCISSORS: u64 = 3;
@@ -67,23 +88,4 @@ fn determine_move(opponent: char, my: char) -> char {
         },
         _ => unimplemented!(),
     }
-}
-
-fn sol1(input: &Vec<String>) -> u64 {
-    let mut score: u64 = 0;
-    for line in input {
-        let chars: Vec<char> = line.chars().collect();
-        score += get_score(chars[0], chars[2]);
-    }
-    score
-}
-
-fn sol2(input: &Vec<String>) -> u64 {
-    let mut score: u64 = 0;
-    for line in input {
-        let chars: Vec<char> = line.chars().collect();
-        let my_move = determine_move(chars[0], chars[2]);
-        score += get_score(chars[0], my_move);
-    }
-    score
 }

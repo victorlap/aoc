@@ -18,12 +18,6 @@ pub fn solve() -> SolutionPair {
     (Solution::U64(sol1), Solution::U64(sol2))
 }
 
-fn sum_calories(elves: &Vec<&[i64]>) -> Vec<i64> {
-    let mut sum: Vec<i64> = elves.iter().map(|n| n.iter().sum()).collect();
-    sum.sort_by(|a, b| b.partial_cmp(a).unwrap());
-    sum
-}
-
 fn sol1(input: &Vec<&[i64]>) -> u64 {
     sum_calories(input)[0].try_into().unwrap()
 }
@@ -34,4 +28,12 @@ fn sol2(input: &Vec<&[i64]>) -> u64 {
     let sum: i64 = best_three.iter().sum();
 
     sum.try_into().unwrap()
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+fn sum_calories(elves: &Vec<&[i64]>) -> Vec<i64> {
+    let mut sum: Vec<i64> = elves.iter().map(|n| n.iter().sum()).collect();
+    sum.sort_by(|a, b| b.partial_cmp(a).unwrap());
+    sum
 }
