@@ -26,7 +26,7 @@ fn sol1(input: &Vec<String>) -> u64 {
         }
     }
 
-    print_field(&field, &bounds);
+    // print_field(&field, &bounds);
 
     field
         .into_iter()
@@ -47,7 +47,7 @@ fn sol2(input: &Vec<String>) -> u64 {
         }
     }
 
-    print_field(&field, &bounds);
+    // print_field(&field, &bounds);
 
     field
         .into_iter()
@@ -118,6 +118,7 @@ fn string_to_coordinate(input: &str) -> Coordinate {
     (parts[0], parts[1])
 }
 
+#[allow(unused)]
 fn print_field(field: &Field, bounds: &Bounds) {
     for i in bounds.2..=bounds.3 {
         for j in bounds.0..=bounds.1 {
