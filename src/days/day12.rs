@@ -32,6 +32,8 @@ fn sol2(input: &Vec<String>) -> u64 {
     replace_start_end_field(&mut field, start, end);
 
     let mut shortest: i32 = i32::MAX;
+    let distances = find_distances(&field, end, is_allowed_route_down);
+
     let a = parse_elevation('a');
     for i in 0..field.len() {
         for j in 0..field[i].len() {
@@ -40,9 +42,9 @@ fn sol2(input: &Vec<String>) -> u64 {
             }
 
             let cur: Coordinate = (i as i32, j as i32);
-            if let Some(distance) = find_distance(&field, cur, end) {
-                if distance < shortest {
-                    shortest = distance;
+            if let Some(distance) = distances.get(&cur) {
+                if distance < &shortest {
+                    shortest = *distance;
                 }
             }
         }
@@ -94,11 +96,24 @@ fn is_out_of_bounds(field: &Field, coordinate: Coordinate) -> bool {
         || coordinate.1 >= field[0].len() as i32
 }
 
-fn is_allowed_route(field: &Field, start: Coordinate, end: Coordinate) -> bool {
+fn is_allowed_route_up(field: &Field, start: Coordinate, end: Coordinate) -> bool {
     field[end.0 as usize][end.1 as usize] - field[start.0 as usize][start.1 as usize] <= 1
 }
 
+fn is_allowed_route_down(field: &Field, start: Coordinate, end: Coordinate) -> bool {
+    field[start.0 as usize][start.1 as usize] - field[end.0 as usize][end.1 as usize] <= 1
+}
+
 fn find_distance(field: &Field, start: Coordinate, end: Coordinate) -> Option<i32> {
+    let distances = find_distances(field, start, is_allowed_route_up);
+    distances.get(&end).copied()
+}
+
+fn find_distances(
+    field: &Field,
+    start: Coordinate,
+    is_allowed_route: fn(&Field, Coordinate, Coordinate) -> bool,
+) -> HashMap<Coordinate, i32> {
     let possible_dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)];
     let mut distances: HashMap<Coordinate, i32> = HashMap::new();
     let mut paths: HashMap<Coordinate, Vec<Coordinate>> = HashMap::new();
@@ -141,5 +156,5 @@ fn find_distance(field: &Field, start: Coordinate, end: Coordinate) -> Option<i3
         }
     }
 
-    distances.get(&end).copied()
+    distances
 }
