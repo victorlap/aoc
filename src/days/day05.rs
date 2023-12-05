@@ -1,5 +1,5 @@
 use crate::{Solution, SolutionPair};
-use std::fs::read_to_string;
+use std::{f32::INFINITY, fs::read_to_string};
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -14,14 +14,36 @@ fn sol1(input: &Vec<String>) -> i64 {
     let seeds = parse_seeds(input.get(0).unwrap());
     let maps = parse_maps(input);
 
-    find_min(seeds, maps)
+    seeds.into_iter().map(|s| find_min(s, &maps)).min().unwrap()
 }
 
 fn sol2(input: &Vec<String>) -> i64 {
-    let seeds = parse_seeds_ranges(input.get(0).unwrap());
+    let seeds = parse_seeds(input.get(0).unwrap());
     let maps = parse_maps(input);
 
-    find_min(seeds, maps)
+    let mut min = i64::MAX;
+
+    let mut i: i64 = 0;
+
+    for seeds in seeds.chunks(2) {
+        for seed in seeds[0]..(seeds[0] + seeds[1]) {
+            i += 1;
+            if i % 1_679_1098 == 0 {
+                println!(
+                    "progress: {}/{} = {}%",
+                    i,
+                    1679109896,
+                    (i * 100 / 1_679_109_896)
+                );
+            }
+            let seed_min = find_min(seed, &maps);
+            if seed_min < min {
+                min = seed_min;
+            }
+        }
+    }
+
+    min
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,20 +63,6 @@ fn parse_seeds(input: &String) -> Vec<Seed> {
         .split_whitespace()
         .into_iter()
         .map(|s| s.parse().unwrap_or_default())
-        .collect()
-}
-
-fn parse_seeds_ranges(input: &String) -> Vec<Seed> {
-    input[7..input.len()]
-        .split_whitespace()
-        .into_iter()
-        .collect::<Vec<&str>>()
-        .chunks(2)
-        .flat_map(|range| {
-            let min: i64 = range[0].parse().unwrap();
-            let len: i64 = range[1].parse().unwrap();
-            (min..(min + len)).collect::<Vec<i64>>()
-        })
         .collect()
 }
 
@@ -85,35 +93,19 @@ fn parse_maps(input: &Vec<String>) -> Vec<InputMap> {
     result
 }
 
-fn find_min(seeds: Vec<Seed>, maps: Vec<InputMap>) -> i64 {
-    // let mut i: i64 = 0;
-    seeds
-        .into_iter()
-        .map(|seed| {
-            // i += 1;
-            // if i % 1000000 == 0 {
-            //     println!(
-            //         "progress: {}/{} = {}%",
-            //         i,
-            //         1679109896,
-            //         (i * 100 / 1679109896)
-            //     );
-            // }
-            let mut value = seed;
-            for map in &maps {
-                let ri = map.into_iter().find(|ri| {
-                    return ri.source + ri.range > value;
-                });
+fn find_min(seed: Seed, maps: &Vec<InputMap>) -> i64 {
+    let mut value = seed;
+    for map in maps {
+        let ri = map.into_iter().find(|ri| {
+            return ri.source + ri.range > value;
+        });
 
-                if let Some(found_ri) = ri {
-                    if value >= found_ri.source && found_ri.source + found_ri.range > value {
-                        let offset: i64 = found_ri.destination - found_ri.source;
-                        value += offset;
-                    }
-                }
+        if let Some(found_ri) = ri {
+            if value >= found_ri.source && found_ri.source + found_ri.range > value {
+                let offset: i64 = found_ri.destination - found_ri.source;
+                value += offset;
             }
-            value
-        })
-        .min()
-        .unwrap()
+        }
+    }
+    value
 }
