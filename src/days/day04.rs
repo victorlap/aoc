@@ -34,7 +34,7 @@ fn sol2(input: &Vec<Card>) -> u64 {
             let cur_winning = c.winning.intersection(&c.having).count();
             let local_extra = extra_copies.get(&c.id).unwrap_or(&0).clone();
 
-            for i in (1..cur_winning + 1) {
+            for i in 1..cur_winning + 1 {
                 let index = c.id + i as u64;
                 if let Some(extra) = extra_copies.get(&index) {
                     extra_copies.insert(index, extra + local_extra + 1);
