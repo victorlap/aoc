@@ -1,5 +1,6 @@
 use crate::{Solution, SolutionPair};
 use std::{f32::INFINITY, fs::read_to_string};
+use std::thread;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -22,24 +23,30 @@ fn sol2(input: &Vec<String>) -> i64 {
     let maps = parse_maps(input);
 
     let mut min = i64::MAX;
-
-    let mut i: i64 = 0;
+    let mut children = vec![];
 
     for seeds in seeds.chunks(2) {
-        for seed in seeds[0]..(seeds[0] + seeds[1]) {
-            i += 1;
-            if i % 1_679_1098 == 0 {
-                println!(
-                    "progress: {}/{} = {}%",
-                    i,
-                    1679109896,
-                    (i * 100 / 1_679_109_896)
-                );
+        let seed_start = seeds[0];
+        let seed_end = seeds[0] + seeds[1];
+        let own_map = maps.to_vec();
+
+        children.push(thread::spawn(move || {
+            let mut local_thread_min = i64::MAX;
+            for seed in seed_start..seed_end {
+                let seed_min = find_min(seed, &own_map);
+                if seed_min < local_thread_min {
+                    local_thread_min = seed_min;
+                }
             }
-            let seed_min = find_min(seed, &maps);
-            if seed_min < min {
-                min = seed_min;
-            }
+            local_thread_min
+        }))
+    }
+
+    for child in children {
+        // Wait for the thread to finish. Returns a result.
+        let thread_min = child.join().unwrap();
+        if thread_min < min {
+            min = thread_min;
         }
     }
 
@@ -51,7 +58,7 @@ fn sol2(input: &Vec<String>) -> i64 {
 type Seed = i64;
 type InputMap = Vec<RangeInfo>;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct RangeInfo {
     source: i64,
     destination: i64,
