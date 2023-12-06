@@ -10,11 +10,11 @@ pub fn solve() -> SolutionPair {
     (Solution::U64(sol1(&parsed)), Solution::U64(sol2(&parsed)))
 }
 
-fn sol1(input: &Vec<String>) -> u64 {
+fn sol1(_input: &Vec<String>) -> u64 {
     0
 }
 
-fn sol2(input: &Vec<String>) -> u64 {
+fn sol2(_input: &Vec<String>) -> u64 {
     0
 }
 
