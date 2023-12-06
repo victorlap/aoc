@@ -63,3 +63,17 @@ fn find_string_num(re: &Regex, input: &String) -> u64 {
         _ => capture.parse().unwrap(),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::day01;
+    use crate::Solution;
+
+    #[test]
+    fn solve() {
+        let result = day01::solve();
+
+        assert_eq!(result.0, Solution::U64(53974));
+        assert_eq!(result.1, Solution::U64(52840));
+    }
+}

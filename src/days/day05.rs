@@ -1,6 +1,6 @@
 use crate::{Solution, SolutionPair};
 use std::fs::read_to_string;
-use std::thread;
+use std::ops::Range;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -23,30 +23,17 @@ fn sol2(input: &Vec<String>) -> i64 {
     let maps = parse_maps(input);
 
     let mut min = i64::MAX;
-    let mut children = vec![];
 
     for seeds in seeds.chunks(2) {
-        let seed_start = seeds[0];
-        let seed_end = seeds[0] + seeds[1];
-        let own_map = maps.to_vec();
+        let mut ranges = vec![seeds[0]..(seeds[0] + seeds[1])];
 
-        children.push(thread::spawn(move || {
-            let mut local_thread_min = i64::MAX;
-            for seed in seed_start..seed_end {
-                let seed_min = find_min(seed, &own_map);
-                if seed_min < local_thread_min {
-                    local_thread_min = seed_min;
-                }
-            }
-            local_thread_min
-        }))
-    }
+        for map in &maps {
+            ranges = replace_ranges(ranges, map);
+        }
 
-    for child in children {
-        // Wait for the thread to finish. Returns a result.
-        let thread_min = child.join().unwrap();
-        if thread_min < min {
-            min = thread_min;
+        let seed_min = ranges.into_iter().map(|r| r.start).min().unwrap();
+        if seed_min < min {
+            min = seed_min;
         }
     }
 
@@ -115,4 +102,80 @@ fn find_min(seed: Seed, maps: &Vec<InputMap>) -> i64 {
         }
     }
     value
+}
+
+fn replace_ranges(ranges: Vec<Range<i64>>, map: &InputMap) -> Vec<Range<i64>> {
+    let mut result = vec![];
+    for range in ranges.clone() {
+        for change in map {
+            let offset: i64 = change.destination - change.source;
+            // Range fully contained in map
+            if range.start >= change.source && range.end < (change.source + change.range) {
+                result.push(Range {
+                    start: range.start + offset,
+                    end: range.end + offset,
+                });
+            // Range only partially changed, first part modified
+            } else if range.start >= change.source
+                && range.start < change.source + change.range
+                && range.end >= (change.source + change.range)
+            {
+                result.push(Range {
+                    start: range.start + offset,
+                    end: change.source + change.range + offset,
+                });
+                result.push(Range {
+                    start: change.source + change.range,
+                    end: range.end,
+                });
+            // Range only partially changed, middle part modified
+            } else if range.start <= change.source && range.end > (change.source + change.range) {
+                result.push(Range {
+                    start: range.start,
+                    end: change.source,
+                });
+                result.push(Range {
+                    start: change.source + offset,
+                    end: change.source + change.range + offset,
+                });
+                result.push(Range {
+                    start: change.source + change.range,
+                    end: range.end,
+                });
+            // Range only partially changed, end part modified
+            } else if range.start <= change.source
+                && range.end > change.source
+                && range.end < (change.source + change.range)
+            {
+                result.push(Range {
+                    start: range.start,
+                    end: change.source,
+                });
+                result.push(Range {
+                    start: change.source + offset,
+                    end: range.end + offset,
+                });
+            }
+        }
+    }
+
+    if result.len() != 0 {
+        result
+    } else {
+        ranges
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::day05;
+    use crate::Solution;
+
+    #[test]
+    fn solve() {
+        let result = day05::solve();
+
+        assert_eq!(result.0, Solution::I64(282277027));
+        assert_eq!(result.1, Solution::I64(11554135));
+    }
 }

@@ -131,3 +131,17 @@ fn sol2(input: &Vec<Game>) -> u64 {
         res + (max.0 * max.1 * max.2)
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::day02;
+    use crate::Solution;
+
+    #[test]
+    fn solve() {
+        let result = day02::solve();
+
+        assert_eq!(result.0, Solution::U64(2551));
+        assert_eq!(result.1, Solution::U64(62811));
+    }
+}

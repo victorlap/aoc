@@ -79,3 +79,17 @@ fn parse_number_list(input: &str) -> HashSet<u64> {
     let parts: Vec<&str> = input.trim().split_whitespace().collect();
     parts.iter().map(|p| p.parse().unwrap()).collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::day04;
+    use crate::Solution;
+
+    #[test]
+    fn solve() {
+        let result = day04::solve();
+
+        assert_eq!(result.0, Solution::U64(24706));
+        assert_eq!(result.1, Solution::U64(13114317));
+    }
+}

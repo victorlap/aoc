@@ -224,3 +224,17 @@ fn get_gear_loc(
 fn is_gear(input: &str) -> bool {
     input == "*"
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::day03;
+    use crate::Solution;
+
+    #[test]
+    fn solve() {
+        let result = day03::solve();
+
+        assert_eq!(result.0, Solution::U64(514969));
+        assert_eq!(result.1, Solution::U64(78915902));
+    }
+}

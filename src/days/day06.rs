@@ -1,5 +1,3 @@
-use std::task::Wake;
-
 use crate::{Solution, SolutionPair};
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -38,4 +36,18 @@ fn determine_ways(time: u64, distance: u64) -> u64 {
         }
     }
     valid
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::day06;
+    use crate::Solution;
+
+    #[test]
+    fn solve() {
+        let result = day06::solve();
+
+        assert_eq!(result.0, Solution::U64(800280));
+        assert_eq!(result.1, Solution::U64(45128024));
+    }
 }
