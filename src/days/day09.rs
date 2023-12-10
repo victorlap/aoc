@@ -67,3 +67,17 @@ fn find_diff(values: &Vec<i64>) -> Vec<i64> {
     }
     diffs
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::day09;
+    use crate::Solution;
+
+    #[test]
+    fn solve() {
+        let result = day09::solve();
+
+        assert_eq!(result.0, Solution::I128(1939607039));
+        assert_eq!(result.1, Solution::I128(1041));
+    }
+}

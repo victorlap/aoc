@@ -100,3 +100,17 @@ fn gcd(mut a: u64, mut b: u64) -> u64 {
 fn lcm(a: u64, b: u64) -> u64 {
     a * (b / gcd(a, b))
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::day08;
+    use crate::Solution;
+
+    #[test]
+    fn solve() {
+        let result = day08::solve();
+
+        assert_eq!(result.0, Solution::U64(19099));
+        assert_eq!(result.1, Solution::U64(17099847107071));
+    }
+}
