@@ -17,13 +17,18 @@ fn main() {
         panic!("Please provide the day(s) to run as a command-line argument.");
     }
 
-    let days: Vec<u8> = args[1..]
-        .iter()
-        .map(|x| {
-            x.parse()
-                .unwrap_or_else(|v| panic!("Not a valid day: {}", v))
-        })
-        .collect();
+    let days: Vec<u8>;
+    if args[1] == "all" {
+        days = (1..=25).collect();
+    } else {
+        days = args[1..]
+            .iter()
+            .map(|x| {
+                x.parse()
+                    .unwrap_or_else(|v| panic!("Not a valid day: {}", v))
+            })
+            .collect();
+    }
 
     let mut runtime = 0.0;
 
