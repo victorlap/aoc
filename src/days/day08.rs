@@ -1,7 +1,7 @@
-use std::collections::{HashMap};
 use crate::{Solution, SolutionPair};
-use std::fs::read_to_string;
 use regex::Regex;
+use std::collections::HashMap;
+use std::fs::read_to_string;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -23,11 +23,16 @@ fn sol2(_input: &Vec<String>) -> u64 {
     let dirs = parse_dir(_input.get(0).unwrap());
     let instructions = parse_instructions(_input);
 
-    let start_pos: Vec<&str> = instructions.keys().map(|k| *k).filter(|k| k.ends_with("A")).collect();
+    let start_pos: Vec<&str> = instructions
+        .keys()
+        .map(|k| *k)
+        .filter(|k| k.ends_with("A"))
+        .collect();
 
-    let steps = start_pos.iter().map(|p| {
-        find_path(&dirs, &instructions, p, |pos| pos.ends_with("Z"))
-    }).collect::<Vec<u64>>();
+    let steps = start_pos
+        .iter()
+        .map(|p| find_path(&dirs, &instructions, p, |pos| pos.ends_with("Z")))
+        .collect::<Vec<u64>>();
 
     steps.iter().fold(1, |a, b| lcm(a, *b))
 }
@@ -43,20 +48,23 @@ fn parse_dir(input: &String) -> Vec<char> {
 fn parse_instructions(input: &Vec<String>) -> HashMap<&Node, (&Node, &Node)> {
     let re = Regex::new(r"\w+").unwrap();
 
-    input
-        .iter()
-        .fold(HashMap::new(), |mut acc, line| {
-            if line.find("=").is_none() {
-                return acc;
-            }
+    input.iter().fold(HashMap::new(), |mut acc, line| {
+        if line.find("=").is_none() {
+            return acc;
+        }
 
-            let parts: Vec<&str> = re.find_iter(line).map(|p| p.as_str()).collect();
-            acc.insert(parts[0], (parts[1], parts[2]));
-            acc
-        })
+        let parts: Vec<&str> = re.find_iter(line).map(|p| p.as_str()).collect();
+        acc.insert(parts[0], (parts[1], parts[2]));
+        acc
+    })
 }
 
-fn find_path(dirs: &Vec<char>, instructions: &HashMap<&Node, (&Node, &Node)>, start: &str, end: fn(&str) -> bool) -> u64 {
+fn find_path(
+    dirs: &Vec<char>,
+    instructions: &HashMap<&Node, (&Node, &Node)>,
+    start: &str,
+    end: fn(&str) -> bool,
+) -> u64 {
     let mut pos: &str = start;
     let mut i = 0;
 
@@ -80,7 +88,9 @@ fn find_path(dirs: &Vec<char>, instructions: &HashMap<&Node, (&Node, &Node)>, st
 }
 
 fn gcd(mut a: u64, mut b: u64) -> u64 {
-    if a == b { return a; }
+    if a == b {
+        return a;
+    }
 
     if b > a {
         let temp = a;

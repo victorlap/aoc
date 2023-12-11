@@ -1,6 +1,6 @@
-use std::cmp::Ordering;
-use std::collections::{HashMap};
 use crate::{Solution, SolutionPair};
+use std::cmp::Ordering;
+use std::collections::HashMap;
 use std::fs::read_to_string;
 use std::str::FromStr;
 
@@ -18,9 +18,9 @@ fn sol1(input: &Vec<Hand>) -> u64 {
     mine.sort();
     mine.reverse();
 
-    mine.into_iter().enumerate().fold(0, |acc, (i, hand)| {
-        acc + (hand.bid * (i + 1) as u64)
-    })
+    mine.into_iter()
+        .enumerate()
+        .fold(0, |acc, (i, hand)| acc + (hand.bid * (i + 1) as u64))
 }
 
 fn sol2(input: &Vec<Hand>) -> u64 {
@@ -28,9 +28,9 @@ fn sol2(input: &Vec<Hand>) -> u64 {
     mine.sort_by(Hand::compare_sol_2);
     mine.reverse();
 
-    mine.into_iter().enumerate().fold(0, |acc, (i, hand)| {
-        acc + (hand.bid * (i + 1) as u64)
-    })
+    mine.into_iter()
+        .enumerate()
+        .fold(0, |acc, (i, hand)| acc + (hand.bid * (i + 1) as u64))
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -119,7 +119,12 @@ impl FromStr for Hand {
         let p: Vec<&str> = s.split_whitespace().collect();
 
         Ok(Hand {
-            cards: p.get(0).unwrap().chars().map(|c| c.to_string().parse().unwrap()).collect(),
+            cards: p
+                .get(0)
+                .unwrap()
+                .chars()
+                .map(|c| c.to_string().parse().unwrap())
+                .collect(),
             bid: p.get(1).unwrap().parse().unwrap(),
         })
     }
@@ -127,9 +132,10 @@ impl FromStr for Hand {
 
 impl Hand {
     fn groups(&self) -> HashMap<Card, u8> {
-        self.cards.to_vec().into_iter().fold(
-            HashMap::new(),
-            |mut map, card| {
+        self.cards
+            .to_vec()
+            .into_iter()
+            .fold(HashMap::new(), |mut map, card| {
                 *map.entry(card).or_insert(0) += 1;
                 map
             })
@@ -139,13 +145,25 @@ impl Hand {
         let mut best_card = (Card::Two, 0);
 
         for group in self.groups() {
-            if (group.1 > best_card.1 && group.0 != Card::J) || (group.0 > best_card.0 && group.1 == best_card.1 && group.0 != Card::J) {
+            if (group.1 > best_card.1 && group.0 != Card::J)
+                || (group.0 > best_card.0 && group.1 == best_card.1 && group.0 != Card::J)
+            {
                 best_card = group
             }
         }
 
         Hand {
-            cards: self.cards.iter().map(|c| if c == &Card::J { best_card.0.clone() } else { c.clone() }).collect(),
+            cards: self
+                .cards
+                .iter()
+                .map(|c| {
+                    if c == &Card::J {
+                        best_card.0.clone()
+                    } else {
+                        c.clone()
+                    }
+                })
+                .collect(),
             bid: self.bid,
         }
     }
@@ -198,7 +216,10 @@ impl Hand {
     }
 
     fn compare_sol_2(&self, other: &Self) -> Ordering {
-        let type_cmp = self.upgrade().get_type().partial_cmp(&other.upgrade().get_type());
+        let type_cmp = self
+            .upgrade()
+            .get_type()
+            .partial_cmp(&other.upgrade().get_type());
 
         if type_cmp.is_some() && type_cmp.unwrap() != Ordering::Equal {
             return type_cmp.unwrap();
@@ -214,7 +235,6 @@ impl Hand {
         return Ordering::Equal;
     }
 }
-
 
 #[cfg(test)]
 mod tests {

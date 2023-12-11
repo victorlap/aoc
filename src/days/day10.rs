@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use crate::{Solution, SolutionPair};
+use std::collections::HashMap;
 use std::fs::read_to_string;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,9 @@ fn sol2(input: &Vec<String>) -> u64 {
 
     // print_grid(&mapped);
 
-    mapped.iter().fold(0, |acc, row| acc + row.iter().filter(|cell| **cell == 'I').count()) as u64
+    mapped.iter().fold(0, |acc, row| {
+        acc + row.iter().filter(|cell| **cell == 'I').count()
+    }) as u64
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -52,7 +54,10 @@ fn find_start_pos(grid: &Vec<Vec<char>>) -> (usize, usize) {
     panic!("No start position found!");
 }
 
-fn find_main_loop(grid: &Vec<Vec<char>>, start_pos: (usize, usize)) -> HashMap<(usize, usize), usize> {
+fn find_main_loop(
+    grid: &Vec<Vec<char>>,
+    start_pos: (usize, usize),
+) -> HashMap<(usize, usize), usize> {
     let mut pos = start_pos;
 
     let mut main_loop = HashMap::new();
@@ -88,41 +93,36 @@ fn find_main_loop(grid: &Vec<Vec<char>>, start_pos: (usize, usize)) -> HashMap<(
 
 fn find_dir(cell: char, prev_dir: char) -> char {
     match cell {
-        'F' => {
-            match prev_dir {
-                'L' => 'D',
-                'U' => 'R',
-                _ => panic!("Invalid direction: {}", prev_dir),
-            }
-        }
-        '7' => {
-            match prev_dir {
-                'R' => 'D',
-                'U' => 'L',
-                _ => panic!("Invalid direction: {}", prev_dir),
-            }
-        }
-        'L' => {
-            match prev_dir {
-                'D' => 'R',
-                'L' => 'U',
-                _ => panic!("Invalid direction: {}", prev_dir),
-            }
-        }
-        'J' => {
-            match prev_dir {
-                'R' => 'U',
-                'D' => 'L',
-                _ => panic!("Invalid direction: {}", prev_dir),
-            }
-        }
+        'F' => match prev_dir {
+            'L' => 'D',
+            'U' => 'R',
+            _ => panic!("Invalid direction: {}", prev_dir),
+        },
+        '7' => match prev_dir {
+            'R' => 'D',
+            'U' => 'L',
+            _ => panic!("Invalid direction: {}", prev_dir),
+        },
+        'L' => match prev_dir {
+            'D' => 'R',
+            'L' => 'U',
+            _ => panic!("Invalid direction: {}", prev_dir),
+        },
+        'J' => match prev_dir {
+            'R' => 'U',
+            'D' => 'L',
+            _ => panic!("Invalid direction: {}", prev_dir),
+        },
         '|' => prev_dir,
         '-' => prev_dir,
         _ => panic!("Invalid cell: {}", cell),
     }
 }
 
-fn check_grid_enclosed(input: &Vec<Vec<char>>, main_loop: &HashMap<(usize, usize), usize>) -> Vec<Vec<char>> {
+fn check_grid_enclosed(
+    input: &Vec<Vec<char>>,
+    main_loop: &HashMap<(usize, usize), usize>,
+) -> Vec<Vec<char>> {
     let mut grid = input.clone();
     let mut windings = 0;
 
@@ -149,7 +149,10 @@ fn check_grid_enclosed(input: &Vec<Vec<char>>, main_loop: &HashMap<(usize, usize
     grid
 }
 
-fn _clean_grid(input: &Vec<Vec<char>>, main_loop: &HashMap<(usize, usize), usize>) -> Vec<Vec<char>> {
+fn _clean_grid(
+    input: &Vec<Vec<char>>,
+    main_loop: &HashMap<(usize, usize), usize>,
+) -> Vec<Vec<char>> {
     let mut grid = input.clone();
 
     for (y, row) in grid.iter_mut().enumerate() {
@@ -166,17 +169,22 @@ fn _clean_grid(input: &Vec<Vec<char>>, main_loop: &HashMap<(usize, usize), usize
 
 fn _print_grid(grid: &Vec<Vec<char>>) {
     for line in grid.iter() {
-        println!("{}", line.iter().map(|c| {
-            match c {
-                'F' => '┌',
-                '7' => '┐',
-                'L' => '└',
-                'J' => '┘',
-                '|' => '│',
-                '-' => '─',
-                _ => *c,
-            }
-        }).collect::<String>());
+        println!(
+            "{}",
+            line.iter()
+                .map(|c| {
+                    match c {
+                        'F' => '┌',
+                        '7' => '┐',
+                        'L' => '└',
+                        'J' => '┘',
+                        '|' => '│',
+                        '-' => '─',
+                        _ => *c,
+                    }
+                })
+                .collect::<String>()
+        );
     }
 }
 

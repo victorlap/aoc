@@ -11,17 +11,26 @@ pub fn solve() -> SolutionPair {
 }
 
 fn sol1(_input: &Vec<String>) -> i128 {
-    _input.into_iter().map(|line| find_sequence_next(line)).sum()
+    _input
+        .into_iter()
+        .map(|line| find_sequence_next(line))
+        .sum()
 }
 
 fn sol2(_input: &Vec<String>) -> i128 {
-    _input.into_iter().map(|line| find_sequence_prev(line)).sum()
+    _input
+        .into_iter()
+        .map(|line| find_sequence_prev(line))
+        .sum()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 fn find_sequence_next(input: &str) -> i128 {
-    let values: Vec<i64> = input.split_whitespace().map(|s| s.parse().unwrap()).collect();
+    let values: Vec<i64> = input
+        .split_whitespace()
+        .map(|s| s.parse().unwrap())
+        .collect();
     let diffs = find_diffs(values);
 
     let mut prev_last = 0;
@@ -33,7 +42,10 @@ fn find_sequence_next(input: &str) -> i128 {
 }
 
 fn find_sequence_prev(input: &str) -> i128 {
-    let values: Vec<i64> = input.split_whitespace().map(|s| s.parse().unwrap()).collect();
+    let values: Vec<i64> = input
+        .split_whitespace()
+        .map(|s| s.parse().unwrap())
+        .collect();
     let diffs = find_diffs(values);
 
     let mut prev_last = 0;
