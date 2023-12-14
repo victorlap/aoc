@@ -1,7 +1,6 @@
 use crate::{Solution, SolutionPair};
 use itertools::Either;
 use std::fs::read_to_string;
-use std::time::Instant;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -20,12 +19,16 @@ fn sol1(input: &Vec<String>) -> u64 {
 }
 
 fn sol2(input: &Vec<String>) -> u64 {
-    let grid = parse_grid(input);
+    let mut grid = parse_grid(input);
 
-    // assume cycle happens early
-    let moved = spin(&grid, 1_000);
+    let (cycle, start) = detect_cycle(grid.clone());
+    let point_in_cycle = (1_000_000_000 - start) % cycle;
 
-    calculate_load(&moved)
+    for _ in 0..start + point_in_cycle {
+        grid = spin(grid);
+    }
+
+    calculate_load(&grid)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -123,28 +126,16 @@ fn move_grid(input: &Vec<Vec<Cell>>, dir: Direction) -> Vec<Vec<Cell>> {
     grid
 }
 
-fn spin(input: &Vec<Vec<Cell>>, times: usize) -> Vec<Vec<Cell>> {
+fn spin(input: Vec<Vec<Cell>>) -> Vec<Vec<Cell>> {
     let mut grid = input.clone();
-    let now = Instant::now();
 
-    for i in 0..times {
-        if i % (times / 100) == 1 {
-            // println!(
-            //     "spinning: {}% in {}s, {}s total",
-            //     i * 100 / times,
-            //     now.elapsed().as_secs(),
-            //     now.elapsed().as_secs() * times as u64 / i as u64
-            // );
-        }
-
-        for dir in [
-            Direction::NORTH,
-            Direction::WEST,
-            Direction::SOUTH,
-            Direction::EAST,
-        ] {
-            grid = move_grid(&grid, dir);
-        }
+    for dir in [
+        Direction::NORTH,
+        Direction::WEST,
+        Direction::SOUTH,
+        Direction::EAST,
+    ] {
+        grid = move_grid(&grid, dir);
     }
 
     grid
@@ -173,6 +164,44 @@ fn _print_grid(grid: &Vec<Vec<Cell>>) {
         println!();
     }
     println!();
+}
+
+// https://en.wikipedia.org/wiki/Cycle_detection#Brent's_algorithm
+fn detect_cycle(start: Vec<Vec<Cell>>) -> (usize, usize) {
+    let mut power = 1;
+    let mut lam = 1;
+    let mut tortoise = start.clone();
+
+    let mut hare = spin(start.clone()); //  f(x0) is the element/node next to x0.
+    while tortoise != hare {
+        if power == lam {
+            // time to start a new power of two?
+            tortoise = hare.clone();
+            power *= 2;
+            lam = 0;
+        }
+        hare = spin(hare.clone());
+        lam += 1
+    }
+
+    // Find the position of the first repetition of length λ
+    tortoise = start.clone();
+    hare = start.clone();
+    for _ in 0..lam {
+        hare = spin(hare)
+    }
+
+    // The distance between the hare and tortoise is now λ.
+
+    // Next, the hare and tortoise move at same speed until they agree
+    let mut mu = 0;
+    while tortoise != hare {
+        tortoise = spin(tortoise);
+        hare = spin(hare);
+        mu += 1;
+    }
+
+    return (lam, mu);
 }
 
 #[cfg(test)]
