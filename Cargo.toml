@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 regex = "1"
+once_cell = { version = "1.18.0", features = [] }
 itertools = "0.12.0"
