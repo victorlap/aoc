@@ -95,3 +95,17 @@ fn find_path(grid: &Vec<Vec<u32>>, min_straight: u32, max_straight: u32) -> u32 
         .min()
         .unwrap()
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::days::day17;
+    use crate::Solution;
+
+    #[test]
+    fn solve() {
+        let result = day17::solve();
+
+        assert_eq!(result.0, Solution::U32(1246));
+        assert_eq!(result.1, Solution::U32(1389));
+    }
+}
