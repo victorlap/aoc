@@ -1,3 +1,4 @@
+use crate::etc::lib::lcm;
 use crate::{Solution, SolutionPair};
 use regex::Regex;
 use std::collections::HashMap;
@@ -85,30 +86,6 @@ fn find_path(
     }
 
     i as u64
-}
-
-fn gcd(mut a: u64, mut b: u64) -> u64 {
-    if a == b {
-        return a;
-    }
-
-    if b > a {
-        let temp = a;
-        a = b;
-        b = temp;
-    }
-
-    while b > 0 {
-        let temp = a;
-        a = b;
-        b = temp % b;
-    }
-
-    a
-}
-
-fn lcm(a: u64, b: u64) -> u64 {
-    a * (b / gcd(a, b))
 }
 
 #[cfg(test)]
