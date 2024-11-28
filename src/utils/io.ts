@@ -1,6 +1,21 @@
+import chalk from 'chalk'
 import type { Day } from 'models'
+import { existsSync, PathLike } from 'node:fs'
+import { mkdir } from 'node:fs/promises'
 
 type Transform<Res, Input = string> = (s: Input) => Res
+
+export const mkdirIfNotExists = async (dir: PathLike) => {
+  if (!existsSync(dir)) {
+    await mkdir(dir)
+  }
+}
+
+export const writeFileIfNotExists = async (filepath: PathLike & Bun.PathLike, input: Blob | NodeJS.TypedArray | ArrayBufferLike | string | Bun.BlobPart[]) => {
+  if (!existsSync(filepath)) {
+    await Bun.write(filepath, input)
+  }
+}
 
 export const readFile = async (filepath: string) => {
   const file = Bun.file(filepath)
@@ -10,6 +25,11 @@ export const readFile = async (filepath: string) => {
 
 export const readInput = async (dir: Day, fileName: string = 'input') => {
   const filepath = `./src/${dir}/${fileName}.txt`
+
+  if (!existsSync(filepath)) {
+    throw chalk.red.bold(`❌ Input does not exist, please run bun setup <day> first`);
+  }
+
   return readFile(filepath)
 }
 

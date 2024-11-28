@@ -1,6 +1,6 @@
-import { existsSync } from 'node:fs'
-import { mkdir } from 'node:fs/promises'
 import chalk from 'chalk'
+import { mkdirIfNotExists, writeFileIfNotExists } from 'io'
+import { existsSync } from 'node:fs'
 import { isBetween } from 'utils'
 import { formatDay, formatDayName, generateTemplate, validateDay } from 'utils/script'
 import { fetchInput } from './api'
@@ -13,10 +13,16 @@ const setupDay = async (day: number) => {
   }
 
   const dir = new URL(`../${formatDayName(day)}/`, import.meta.url)
+  const inputFile = new URL(`input.txt`, dir.href)
+  const dayFile = new URL(`index.ts`, dir.href)
 
-  if (existsSync(dir)) {
+  if (existsSync(inputFile) && existsSync(dayFile)) {
     console.log(chalk.red(`Day ${day} already exists!`))
     return
+  }
+
+  if (existsSync(dayFile)) {
+    console.log(`Day ${day} already exists, only retrieving input`)
   }
 
   const currentYear = new Date().getFullYear()
@@ -43,9 +49,9 @@ const setupDay = async (day: number) => {
   console.log(`📂 Setting up day ${formatDay(day)}...`)
 
   try {
-    await mkdir(dir)
-    await Bun.write(new URL(`input.txt`, dir.href), input ?? '')
-    await Bun.write(new URL(`index.ts`, dir.href), generateTemplate(day))
+    await mkdirIfNotExists(dir)
+    await writeFileIfNotExists(inputFile, input ?? '')
+    await writeFileIfNotExists(dayFile, generateTemplate(day))
 
     console.log(chalk.green.bold(`✅ Day ${formatDay(day)} set up!`))
   } catch (err: any) {
