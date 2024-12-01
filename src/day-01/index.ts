@@ -13,9 +13,21 @@ export const part1 = () => {
   return answer
 }
 
+export const part2 = () => {
+  const lists = getSortedLists();
+  const list2Count = Object.groupBy(lists[1], (i) => +i)
+  let answer = 0;
+
+  for (let i = 0; i < lists[0].length; i++) {
+    answer += lists[0][i] * (list2Count[lists[0][i]]?.length || 0)
+  }
+ 
+  return answer
+}
+
 const getSortedLists =() => {
   const lines = parseLines(input);
-  const lists = [[], []] as Array<Array<Number>>;
+  const lists = [[], []] as Array<Array<number>>;
 
   for (let i = 0; i < lines.length; i++) {
     const parts = lines[i].split("   ");
