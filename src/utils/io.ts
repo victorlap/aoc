@@ -23,7 +23,7 @@ export const readFile = async (filepath: string) => {
   return text.trim()
 }
 
-export const readInput = async (dir: Day, fileName: string = 'input') => {
+export const readInput = async (dir: Day, fileName = 'input') => {
   const filepath = `./src/${dir}/${fileName}.txt`
 
   if (!existsSync(filepath)) {

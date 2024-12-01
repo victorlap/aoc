@@ -35,5 +35,5 @@ const runDay = async (day: number) => {
   )
 }
 
-const day = Number(Bun.argv[2] ?? '')
+const day = Number(Bun.argv[2] ?? '') || new Date().getDate()
 runDay(day)

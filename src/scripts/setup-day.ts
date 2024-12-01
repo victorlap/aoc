@@ -54,10 +54,10 @@ const setupDay = async (day: number) => {
     await writeFileIfNotExists(dayFile, generateTemplate(day))
 
     console.log(chalk.green.bold(`✅ Day ${formatDay(day)} set up!`))
-  } catch (err: any) {
-    console.error(chalk.red(err?.message ?? 'Failed to set up day'))
+  } catch (err) {
+    console.error(chalk.red(err instanceof Error ? err.message : 'Failed to set up day'))
   }
 }
 
-const day = Number(Bun.argv[2] ?? '') ?? new Date().getDate()
+const day = Number(Bun.argv[2] ?? '') || new Date().getDate()
 setupDay(day)
