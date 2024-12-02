@@ -1,7 +1,8 @@
-import matijaoe from '@matijaoe/eslint-config'
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
 
-export default matijaoe({
-  rules: {
-    'no-console': 'off',
-  },
-})
+export default tseslint.config(
+    eslint.configs.recommended,
+    tseslint.configs.strict,
+    tseslint.configs.stylistic,
+);

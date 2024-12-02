@@ -42,6 +42,7 @@ const checkReportWithDampener = (report: number[]) => {
   // Check with one removed
   for (let i = 0; i < report.length; i++) {
     const copy = [...report];
+    /* eslint-disable @typescript-eslint/no-dynamic-delete */
     delete copy[i];
 
     if(checkReport(copy.filter(Number))) {
