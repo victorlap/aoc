@@ -3,16 +3,13 @@ use crate::{Solution, SolutionPair};
 ///////////////////////////////////////////////////////////////////////////////
 
 pub fn solve() -> SolutionPair {
-    let sol1: u64 = sol1();
-    let sol2: u64 = sol2();
+    let sol1: u64 = sol1(&mut monkeys(), &mut items());
+    let sol2: u64 = sol2(&mut monkeys(), &mut items(), 9699690);
 
     (Solution::U64(sol1), Solution::U64(sol2))
 }
 
-fn sol1() -> u64 {
-    let mut monkeys = monkeys();
-    let mut items: Vec<Vec<Item>> = items();
-
+fn sol1(monkeys: &mut Vec<Monkey>, items: &mut Vec<Vec<Item>>) -> u64 {
     for _ in 0..20 {
         for i in 0..monkeys.len() {
             let mut monkey = &mut monkeys[i];
@@ -33,27 +30,21 @@ fn sol1() -> u64 {
     (monkeys[0].inspected * monkeys[1].inspected) as u64
 }
 
-fn sol2() -> u64 {
-    let mut monkeys = monkeys();
-    let mut items: Vec<Vec<Item>> = items();
-    // let common_multiple = 96577;
-    let common_multiple = 9699690;
-
+fn sol2(monkeys: &mut Vec<Monkey>, items: &mut Vec<Vec<Item>>, common_multiple: i64) -> u64 {
     for j in 1..=10_000 {
         for i in 0..monkeys.len() {
-            let mut monkey = &mut monkeys[i];
+            let monkey = &mut monkeys[i];
             let cur_items = items[i].clone();
             items[i] = vec![];
 
             for level in cur_items {
-                monkey.inspected += 1;
-                let mut newlevel = (monkey.inspect)(level);
+                let mut newlevel = monkey.inspect(level);
 
                 while newlevel > common_multiple {
                     newlevel = newlevel - common_multiple;
                 }
 
-                let newmonkey = (monkey.test)(newlevel);
+                let newmonkey = monkey.test(newlevel);
                 items[newmonkey].push(newlevel);
             }
         }
@@ -73,7 +64,7 @@ fn sol2() -> u64 {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-type Item = u128;
+type Item = i64;
 
 #[derive(Debug, Clone)]
 struct Monkey {
@@ -89,6 +80,13 @@ impl Monkey {
             inspect: inspect,
             test: test,
         }
+    }
+    fn inspect(&mut self, item: Item) -> Item {
+        self.inspected += 1;
+        (self.inspect)(item)
+    }
+    fn test(&mut self, item: Item) -> usize {
+        (self.test)(item)
     }
 }
 
@@ -244,4 +242,19 @@ fn items() -> Vec<Vec<Item>> {
         vec![53, 86, 98, 70, 64],
         vec![88, 64],
     ]
+}
+
+#[test]
+fn test() {
+    let sol1_example = sol1(&mut example_monkeys(), &mut example_items());
+    assert_eq!(sol1_example, 10605);
+
+    let sol1 = sol1(&mut monkeys(), &mut items());
+    assert_eq!(sol1, 50616);
+
+    let sol2_example = sol2(&mut example_monkeys(), &mut example_items(), 96577);
+    assert_eq!(sol2_example, 2713310158);
+
+    let sol2 = sol2(&mut monkeys(), &mut items(), 9699690);
+    assert_eq!(sol2, 11309046332);
 }
