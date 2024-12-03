@@ -1,0 +1,25 @@
+{
+  "name": "advent-of-code-2024",
+  "type": "module",
+  "author": {
+    "name": "Victor Lap",
+    "url": "https://github.com/victorlap/adventofcode2024"
+  },
+  "module": "index.ts",
+  "scripts": {
+    "day": "bun run ./src/scripts/run-day.ts",
+    "setup": "bun run ./src/scripts/setup-day.ts",
+    "lint": "eslint .",
+    "format": "eslint . --fix"
+  },
+  "dependencies": {
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "bun-types": "latest",
+    "chalk": "^5.3.0",
+    "eslint": "^9.15.0",
+    "typescript-eslint": "^8.16.0"
+  }
+}
