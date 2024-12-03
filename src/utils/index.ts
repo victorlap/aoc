@@ -7,6 +7,10 @@ export const sum = (numbers: number[]) => {
   return numbers.reduce((sum, num) => sum + num, 0)
 }
 
+export const mul = (numbers: number[]) => {
+  return numbers.reduce((prev, num) => prev * num, 1)
+}
+
 export const unique = <T>(arr: T[]):T[] => {
   return [...new Set(arr)]
 }
