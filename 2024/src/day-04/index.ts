@@ -13,11 +13,11 @@ export const part1 = () => {
         count++;
       }
       // down
-      if (lines[i][j] === "X" && lines?.[i + 1]?.[j] === "M" && lines?.[i+2]?.[j] === "A" && lines?.[i+3]?.[j] === "S") {
+      if (lines[i][j] === "X" && lines?.[i + 1]?.[j] === "M" && lines?.[i + 2]?.[j] === "A" && lines?.[i + 3]?.[j] === "S") {
         count++
       }
       // down reverse
-      if (lines[i][j] === "S" && lines?.[i+1]?.[j] === "A" && lines?.[i + 2]?.[j] === "M" && lines?.[i + 3]?.[j] === "X") {
+      if (lines[i][j] === "S" && lines?.[i + 1]?.[j] === "A" && lines?.[i + 2]?.[j] === "M" && lines?.[i + 3]?.[j] === "X") {
         count++
       }
       // down left across
@@ -42,3 +42,25 @@ export const part1 = () => {
   return count
 }
 
+
+export const part2 = () => {
+  const lines = parseLines(input)
+  let count = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    for (let j = 0; j < lines[i].length; j++) {
+      if (lines[i][j] !== "A") {
+        continue;
+      }
+
+      const tlbr = (lines?.[i - 1]?.[j - 1] == "M" && lines?.[i + 1]?.[j + 1] == "S") || (lines?.[i - 1]?.[j - 1] == "S" && lines?.[i + 1]?.[j + 1] == "M")
+      const trbl = (lines?.[i - 1]?.[j + 1] == "M" && lines?.[i + 1]?.[j - 1] == "S") || (lines?.[i - 1]?.[j + 1] == "S" && lines?.[i + 1]?.[j - 1] == "M")
+
+      if (tlbr && trbl) {
+        count++
+      }
+    }
+  }
+
+  return count
+}
