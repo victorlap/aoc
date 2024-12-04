@@ -16,6 +16,8 @@ const runDay = async (day: number) => {
     return
   }
 
+  console.log(chalk.green(`Running day: ${chalk.bold(day)}`))
+
   const { part1, part2 } = await import(`../${formatDayName(day)}/index.ts`)
 
   const [one, onePerformance] = withPerformance(() => part1?.())
