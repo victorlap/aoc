@@ -14,6 +14,7 @@ const setupDay = async (day: number) => {
 
   const dir = new URL(`../${formatDayName(day)}/`, import.meta.url)
   const inputFile = new URL(`input.txt`, dir.href)
+  const testFile = new URL(`test.txt`, dir.href)
   const dayFile = new URL(`index.ts`, dir.href)
 
   if (existsSync(inputFile) && existsSync(dayFile)) {
@@ -51,6 +52,7 @@ const setupDay = async (day: number) => {
   try {
     await mkdirIfNotExists(dir)
     await writeFileIfNotExists(inputFile, input ?? '')
+    await writeFileIfNotExists(testFile, '')
     await writeFileIfNotExists(dayFile, generateTemplate(day))
 
     console.log(chalk.green.bold(`✅ Day ${formatDay(day)} set up!`))
