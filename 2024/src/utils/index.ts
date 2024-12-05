@@ -11,8 +11,15 @@ export const mul = (numbers: number[]) => {
   return numbers.reduce((prev, num) => prev * num, 1)
 }
 
-export const unique = <T>(arr: T[]):T[] => {
+export const unique = <T>(arr: T[]): T[] => {
   return [...new Set(arr)]
+}
+
+
+export const swapInArray = <T>(arr: T[], from: number, to: number) => {
+  const temp = arr[from];
+  arr.splice(from, 1, arr[to]);
+  arr.splice(to, 1, temp);
 }
 
 export const asc = <T extends number | string>(a: T, b: T): number => {
