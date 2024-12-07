@@ -1,4 +1,4 @@
-import { isBetween } from 'utils'
+import {isBetween} from 'utils'
 
 export const formatDay = (day: number | string) => {
   const parsedDay = Number(day)
@@ -25,9 +25,9 @@ export const part1 = () => {
 }
 `
 
-export const withPerformance = async <T>(handler: () => T) => {
+export const withPerformance = <T>(handler: () => T) => {
   const start = performance.now()
-  const result = await handler()
+  const result = handler()
   const end = performance.now()
 
   return [result, end - start] as const
