@@ -1,7 +1,8 @@
 import chalk from 'chalk'
-import type { Day } from 'models'
-import { existsSync, PathLike } from 'node:fs'
-import { mkdir } from 'node:fs/promises'
+import type {Day} from 'models'
+import {existsSync, PathLike} from 'node:fs'
+import {mkdir} from 'node:fs/promises'
+import {Grid} from "utils/grid";
 
 type Transform<Res, Input = string> = (s: Input) => Res
 
@@ -37,7 +38,7 @@ export const readInput = async (dir: Day, fileName?: string) => {
 export const parseLines = <T = string>(
   input: string,
   as?: Transform<T>,
-  { includeEmpty }: { includeEmpty?: boolean } = {}
+  {includeEmpty}: { includeEmpty?: boolean } = {}
 ) => {
   let lines = input.split('\n')
   if (!includeEmpty) {
@@ -55,4 +56,12 @@ export const parseGroups = <T = string>(
   return groups.map((group) => {
     return parseLines(group, as)
   }) as T[][]
+}
+
+export const parseGrid = <T = string>(
+  input: string,
+  splitter = '',
+  as?: Transform<T>
+) => {
+  return Grid.of(parseLines(input), splitter, as)
 }
