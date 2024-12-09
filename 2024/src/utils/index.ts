@@ -43,3 +43,20 @@ export const desc = <T extends number | string>(a: T, b: T): number => {
 export const isBetween = (x: number, [min, max]: [number, number]) => {
   return x >= min && x <= max
 }
+
+// https://stackoverflow.com/q/37892738/2232346
+export function* subsets<T>(array: T[], length :number, start = 0): Generator<T[]> {
+  if (start >= array.length || length < 1) {
+    yield [];
+  } else {
+    while (start <= array.length - length) {
+      let first = array[start];
+      for ( const subset of subsets(array, length - 1, start + 1)) {
+        subset.push(first);
+        yield subset;
+      }
+      ++start;
+    }
+  }
+}
+

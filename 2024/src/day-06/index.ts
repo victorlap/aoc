@@ -6,7 +6,7 @@ const input = await readInput('day-06')
 export const part1 = () => {
   const grid = parseGrid(input, '')
 
-  let pos = grid.first(p => p.value === '^')!
+  let pos = grid.allPoints().find(p => p.value === '^')!
   let nextPos = pos
   let dir = getDir(pos.value);
 
@@ -22,7 +22,7 @@ export const part1 = () => {
   }
 
   let sum = 0
-  grid.each(p => p.value === "X" && sum++)
+  grid.allPoints().forEach(p => p.value === "X" && sum++)
 
   return sum
 }
@@ -30,7 +30,7 @@ export const part1 = () => {
 export const part2 = () => {
   const grid = parseGrid(input, '')
 
-  let pos = grid.first(p => p.value === '^')!
+  let pos = grid.allPoints().find(p => p.value === '^')!
   let nextPos = pos
   let dir = getDir(pos.value);
   let visited = new Map<string, boolean>

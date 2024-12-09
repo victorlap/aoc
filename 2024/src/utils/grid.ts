@@ -27,20 +27,10 @@ export class Grid<T = string> {
     return this.get(p.y + dir[0], p.x + dir[1])
   }
 
-  each(callback: (point: Point<T>) => any) {
+  * allPoints() {
     for (const row of this.points) {
       for (const col of row) {
-        callback(col)
-      }
-    }
-  }
-
-  first(callback: (point: Point<T>) => any) {
-    for (const row of this.points) {
-      for (const col of row) {
-        if (callback(col)) {
-          return col
-        }
+        yield col
       }
     }
   }
@@ -67,6 +57,10 @@ export class Point<T> {
 
   toString() {
     return this.value
+  }
+
+  debug() {
+    return `(${this.y},${this.x}): ${this.value}`
   }
 
   eq(other: Point<T>) {
