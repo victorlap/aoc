@@ -8,7 +8,7 @@
 - Puzzle input automatically fetched
 - Performance metrics
 
-Based on https://github.com/matijaoe/advent-of-code-2023
+Based on https://github.com/matijaoe/advent-of-code
 
 ## Setup
 
