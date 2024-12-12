@@ -7,7 +7,7 @@
   },
   "module": "index.ts",
   "scripts": {
-    "watch": "bun run --watch ./src/scripts/run-day.ts",
+    "watch": "bun run --watch ./src/scripts/run-day.ts --test",
     "day": "bun run ./src/scripts/run-day.ts",
     "setup": "bun run ./src/scripts/setup-day.ts",
     "lint": "eslint .",
