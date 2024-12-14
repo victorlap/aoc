@@ -15,6 +15,13 @@ export class Grid<T = string> {
           new Point(y, x, as ? as(col) : col as T))))
   }
 
+  static new<T>(length: number, width: number, initializer: (y: number, x: number) => T): Grid<T> {
+    return new Grid(
+      Array.from({length}, (_, y) =>
+        Array(width).fill('.').map((_, x) =>
+          new Point(y, x, initializer(y, x)))))
+  }
+
   get(y: number, x: number) {
     return this.points?.[y]?.[x]
   }
@@ -35,12 +42,12 @@ export class Grid<T = string> {
     }
   }
 
-  toString() {
-    return this.points.map(row => row.map(col => col.toString()).join('')).join("\n") + "\n"
+  toString(printer: (v: T) => string) {
+    return this.points.map(row => row.map(col => col.toString(printer)).join('')).join("\n") + "\n"
   }
 
-  clone() {
-    return Grid.of(this.toString().split("\n"))
+  clone(cloner: (v: T) => T = (v) => v): Grid<T> {
+    return Grid.new(this.points.length, this.points[0].length, (y, x) => cloner(this.points[y][x].value))
   }
 }
 
@@ -55,8 +62,8 @@ export class Point<T> {
     this.value = value;
   }
 
-  toString() {
-    return this.value
+  toString(printer: (v: T) => string) {
+    return printer(this.value)
   }
 
   debug() {
