@@ -42,7 +42,7 @@ export class Grid<T = string> {
     }
   }
 
-  toString(printer: (v: T) => string) {
+  toString(printer: (v: T) => string = (v) => v) {
     return this.points.map(row => row.map(col => col.toString(printer)).join('')).join("\n") + "\n"
   }
 
