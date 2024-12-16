@@ -20,8 +20,8 @@ const runDay = async (day: number) => {
 
   const { part1, part2 } = await import(`../${formatDayName(day)}/index.ts`)
 
-  const [one, onePerformance] = withPerformance(() => part1?.())
-  const [two, twoPerformance] = withPerformance(() => part2?.())
+  const [one, onePerformance] = await withPerformance(() => part1?.())
+  const [two, twoPerformance] = await withPerformance(() => part2?.())
 
   console.log(
     '🌲',

@@ -19,16 +19,16 @@ export const part1 = () => {
   return sum(grid.allPoints().map(p => p.value === "O" ? (100 * p.y + p.x) : 0).toArray())
 }
 
-export const part2 = () => {
+export const part2 = async () => {
   const groups = parseGroups(input)
   const instructions = groups[1].join('')
   let grid = parseGrid(groups[0].map(double).join('\n'))
   let pos = grid.allPoints().find(p => p.value === "@")!
 
-  // let height = grid.points.length
   for (const i of instructions) {
     [grid, pos] = move2(grid, pos, directions[i])
-    // Bun.write(Bun.stdout, '\x1b[' + height + 'A')
+    // await Bun.sleep(1)
+    // Bun.write(Bun.stdout, '\x1b[' + grid.height + 'A')
     // Bun.write(Bun.stdout, grid.toString())
   }
 

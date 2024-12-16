@@ -22,6 +22,14 @@ export class Grid<T = string> {
           new Point(y, x, initializer(y, x)))))
   }
 
+  get height() {
+    return this.points.length
+  }
+
+  get width() {
+    return this.points[0]?.length ?? 0
+  }
+
   get(y: number, x: number) {
     return this.points?.[y]?.[x]
   }

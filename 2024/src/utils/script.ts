@@ -25,9 +25,9 @@ export const part1 = () => {
 }
 `
 
-export const withPerformance = <T>(handler: () => T) => {
+export const withPerformance = async <T>(handler: () => T) => {
   const start = performance.now()
-  const result = handler()
+  const result = await handler()
   const end = performance.now()
 
   return [result, end - start] as const
