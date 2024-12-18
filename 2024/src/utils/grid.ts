@@ -15,9 +15,9 @@ export class Grid<T = string> {
           new Point(y, x, as ? as(col) : col as T))))
   }
 
-  static new<T>(length: number, width: number, initializer: (y: number, x: number) => T): Grid<T> {
+  static new<T>(height: number, width: number, initializer: (y: number, x: number) => T): Grid<T> {
     return new Grid(
-      Array.from({length}, (_, y) =>
+      Array.from({length: height}, (_, y) =>
         Array(width).fill('.').map((_, x) =>
           new Point(y, x, initializer(y, x)))))
   }
@@ -50,7 +50,7 @@ export class Grid<T = string> {
     }
   }
 
-  toString(printer: (v: T) => string = (v) => v) {
+  toString(printer: (v: T) => string = (v) => v as string) {
     return this.points.map(row => row.map(col => col.toString(printer)).join('')).join("\n") + "\n"
   }
 
@@ -78,7 +78,7 @@ export class Point<T> {
     return `(${this.y},${this.x}): ${this.value}`
   }
 
-  eq(other: Point<T>) {
-    return other.y === this.y && other.x === this.x
+  eq(other: Point<T> | undefined) {
+    return other && other.y === this.y && other.x === this.x
   }
 }
