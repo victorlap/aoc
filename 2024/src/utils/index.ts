@@ -15,6 +15,13 @@ export const unique = <T>(arr: T[]): T[] => {
   return [...new Set(arr)]
 }
 
+export const min = (numbers: number[]) => {
+  return numbers.reduce((prev, num) => prev > num ? num : prev, Infinity)
+}
+
+export const max = (numbers: number[]) => {
+  return numbers.reduce((prev, num) => prev < num ? num : prev, Infinity)
+}
 
 export const swapInArray = <T>(arr: T[], from: number, to: number) => {
   const temp = arr[from];
@@ -45,13 +52,13 @@ export const isBetween = (x: number, [min, max]: [number, number]) => {
 }
 
 // https://stackoverflow.com/q/37892738/2232346
-export function* subsets<T>(array: T[], length :number, start = 0): Generator<T[]> {
+export function* subsets<T>(array: T[], length: number, start = 0): Generator<T[]> {
   if (start >= array.length || length < 1) {
     yield [];
   } else {
     while (start <= array.length - length) {
       let first = array[start];
-      for ( const subset of subsets(array, length - 1, start + 1)) {
+      for (const subset of subsets(array, length - 1, start + 1)) {
         subset.push(first);
         yield subset;
       }
