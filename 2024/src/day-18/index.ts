@@ -7,8 +7,7 @@ const possibleDirections: Direction[] = [[1, 0], [-1, 0], [0, 1], [0, -1]]
 
 export const part1 = () => {
   const lines = parseLines(input)
-  // const [width, height, length] = [7, 7, 12];
-  const [width, height, length] = [71, 71, 1024];
+  const [width, height, length] = lines.length < 100 ? [7, 7, 12] : [71, 71, 1024];
   const grid = Grid.new(height, width, () => '.')
 
   for (let i = 0; i < length; i++) {
@@ -24,8 +23,7 @@ export const part1 = () => {
 
 export const part2 = () => {
   const lines = parseLines(input)
-  // const [width, height, length] = [7, 7, 12];
-  const [width, height, length] = [71, 71, 1024];
+  const [width, height, length] = lines.length < 100 ? [7, 7, 12] : [71, 71, 1024];
   const grid = Grid.new(height, width, () => '.')
 
   for (let i = 0; i < length; i++) {
