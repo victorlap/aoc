@@ -15,7 +15,7 @@ export const unique = <T>(arr: T[]): T[] => {
   return [...new Set(arr)]
 }
 
-export const min = (numbers: number[]) => {
+export const min = (numbers: number[]|bigint[]) => {
   return numbers.reduce((prev, num) => prev > num ? num : prev, Infinity)
 }
 
@@ -37,6 +37,12 @@ export const asc = <T extends number | string>(a: T, b: T): number => {
   }
   throw new Error('Invalid argument types')
 }
+
+// https://stackoverflow.com/a/64777515/2232346
+export const chunk = <T>(arr: T[], size: number): T[][] =>
+  [...Array(Math.ceil(arr.length / size))].map((_, i) =>
+    arr.slice(size * i, size + size * i)
+  );
 
 export const desc = <T extends number | string>(a: T, b: T): number => {
   if (isNumber(a) && isNumber(b)) {
