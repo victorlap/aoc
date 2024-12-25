@@ -15,12 +15,28 @@ export const unique = <T>(arr: T[]): T[] => {
   return [...new Set(arr)]
 }
 
-export const min = (numbers: number[]|bigint[]) => {
-  return numbers.reduce((prev, num) => prev > num ? num : prev, Infinity)
+export const min = <T extends number | bigint>(numbers: T[]) => {
+  return numbers.reduce((prev: T | undefined, num) => !prev || prev > num ? num : prev, undefined)
 }
 
 export const max = (numbers: number[]) => {
   return numbers.reduce((prev, num) => prev < num ? num : prev, Infinity)
+}
+
+export const minBy = <T>(items: T[], pluck: (item: T) => number) => items.reduce((seed: T | null, item) => {
+  return (seed && pluck(seed) < pluck(item)) ? seed : item;
+}, null);
+export const maxBy = <T>(items: T[], pluck: (item: T) => number) => items.reduce((seed: T | null, item) => {
+  return (seed && pluck(seed) > pluck(item)) ? seed : item;
+}, null);
+
+export const groupBy = <K extends keyof any, T>(items: T[], accumulator: (item: T) => K) => {
+  return items.reduce((acc, cur) => {
+    let key = accumulator(cur)
+    acc[key] = acc[key] || []
+    acc[key].push(cur)
+    return acc
+  }, {} as Record<K, T[]>)
 }
 
 export const swapInArray = <T>(arr: T[], from: number, to: number) => {
@@ -71,5 +87,38 @@ export function* subsets<T>(array: T[], length: number, start = 0): Generator<T[
       ++start;
     }
   }
+}
+
+export function* permutations<T>(elements: T[]): Generator<T[]> {
+  if (elements.length === 1) {
+    yield elements;
+  } else {
+    let [first, ...rest] = elements;
+    for (let perm of permutations(rest)) {
+      for (let i = 0; i < elements.length; i++) {
+        let start = perm.slice(0, i);
+        let rest = perm.slice(i);
+        yield [...start, first, ...rest];
+      }
+    }
+  }
+}
+
+export function orderedMultiSubsets<T>(set: Set<T>, n: number): Generator<T[]> {
+  if (!Number.isInteger(n) || n < 0) return function* () {
+  }();
+  const subset = new Array(n), iterator = set.values();
+  return (function* backtrack(index): Generator<T[]> {
+    if (index === n) {
+      yield subset.slice();
+    } else {
+      for (let i = 0; i < set.size; ++i) {
+        subset[index] = iterator.next().value; /* Get first item */
+        set.delete(subset[index]); /* Remove it */
+        set.add(subset[index]); /* Insert it at the end */
+        yield* backtrack(index + 1);
+      }
+    }
+  })(0);
 }
 

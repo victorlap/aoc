@@ -15,6 +15,14 @@ export class Grid<T = string> {
           new Point(y, x, as ? as(col) : col as T))))
   }
 
+  static from<T>(points: T[][]) {
+    return new Grid(
+      points.map((row, y) =>
+        row.map((col, x) => new Point(y, x, col))
+      )
+    )
+  }
+
   static new<T>(height: number, width: number, initializer: (y: number, x: number) => T): Grid<T> {
     return new Grid(
       Array.from({length: height}, (_, y) =>
