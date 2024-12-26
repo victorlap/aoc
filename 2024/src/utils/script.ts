@@ -20,7 +20,7 @@ const input = await readInput('${formatDayName(day)}')
 
 export const part1 = () => {
   const lines = parseLines(input)
-  // your code goes here
+
   return lines.length
 }
 `
