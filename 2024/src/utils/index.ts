@@ -30,6 +30,16 @@ export const maxBy = <T>(items: T[], pluck: (item: T) => number) => items.reduce
   return (seed && pluck(seed) > pluck(item)) ? seed : item;
 }, null);
 
+export const pluck = <T, K extends keyof any, V>(items: T[], key: (item: T) => K, value: (item: T) => V): Record<K, V> => {
+  let res = {} as Record<K, V>;
+
+  for (const item of items) {
+    res[key(item)] = value(item)
+  }
+
+  return res;
+}
+
 export const groupBy = <K extends keyof any, T>(items: T[], accumulator: (item: T) => K) => {
   return items.reduce((acc, cur) => {
     let key = accumulator(cur)
